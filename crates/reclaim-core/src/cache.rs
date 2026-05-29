@@ -457,7 +457,7 @@ mod tests {
     use super::*;
     use crate::candidate::{Action, TargetKind};
 
-    fn make_candidate(path: &str, score: f64) -> Candidate {
+    fn make_candidate(path: &str, score: f32) -> Candidate {
         Candidate {
             path: PathBuf::from(path),
             kind: TargetKind::Venv,

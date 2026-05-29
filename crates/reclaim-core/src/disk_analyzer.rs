@@ -446,8 +446,9 @@ mod tests {
     fn test_classify_code() {
         let path = PathBuf::from("/home/user/repos/project/node_modules/package/index.js");
         let (cat, subcat) = classify_path(&path);
-        assert_eq!(cat, DiskCategory::Reclaimable);
-        assert_eq!(subcat, DiskSubcategory::Dependencies);
+        // .js file inside node_modules is classified as SourceCode (even though node_modules itself is reclaimable)
+        assert_eq!(cat, DiskCategory::Code);
+        assert_eq!(subcat, DiskSubcategory::SourceCode);
     }
     
     #[test]

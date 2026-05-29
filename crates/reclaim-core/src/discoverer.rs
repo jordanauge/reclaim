@@ -192,7 +192,7 @@ mod tests {
 
     #[test]
     fn test_get_hot_paths() {
-        let profile = Profile::default();
+        let profile = Profile::default_conservative();
         let (tx, _rx) = crossbeam_channel::unbounded();
         let known = HashSet::new();
         let discoverer = HotPathsDiscoverer::new(tx, profile, known);

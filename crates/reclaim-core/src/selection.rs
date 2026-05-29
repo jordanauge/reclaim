@@ -252,7 +252,7 @@ mod tests {
     use crate::candidate::{Action, TargetKind};
     use std::path::PathBuf;
 
-    fn make_candidate(score: f64) -> Candidate {
+    fn make_candidate(score: f32) -> Candidate {
         Candidate {
             path: PathBuf::from("/test"),
             kind: TargetKind::Venv,

@@ -163,9 +163,10 @@ mod tests {
 
     #[test]
     fn test_get_quick_size_file() {
-        // Test on this source file
-        let path = std::path::Path::new(file!());
-        let size = get_quick_size(path).unwrap();
+        // Test on Cargo.toml which should exist in manifest dir
+        let manifest_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let cargo_toml = manifest_dir.join("Cargo.toml");
+        let size = get_quick_size(&cargo_toml).unwrap();
         assert!(size > 0);
     }
 

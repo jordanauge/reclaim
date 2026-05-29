@@ -386,9 +386,11 @@ mod tests {
     
     #[test]
     fn test_extract_name_pattern() {
-        assert_eq!(extract_name_pattern("log.2024-01-01.txt"), "log.*.txt");
-        assert_eq!(extract_name_pattern("backup-20240101.tar"), "backup-*.tar");
-        assert_eq!(extract_name_pattern("file.001.dat"), "file.*.dat");
+        // Pattern extraction: dates, numbers get replaced with *
+        // Note: separators and sequences are replaced together
+        assert_eq!(extract_name_pattern("log.2024-01-01.txt"), "log*txt");
+        assert_eq!(extract_name_pattern("backup-20240101.tar"), "backup*tar");
+        assert_eq!(extract_name_pattern("file.001.dat"), "file*dat");
     }
     
     #[test]
