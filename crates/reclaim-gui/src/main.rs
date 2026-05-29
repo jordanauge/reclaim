@@ -1095,7 +1095,7 @@ impl ReclaimApp {
     /// Render candidates grouped (duplicates, similar names, same directory)
     fn render_grouped_table_view(&mut self, ui: &mut egui::Ui) {
         egui::Grid::new("grouped_candidates_grid")
-            .num_columns(8)
+            .num_columns(9)
             .striped(true)
             .spacing([10.0, 6.0])
             .show(ui, |ui| {
@@ -1103,7 +1103,8 @@ impl ReclaimApp {
                 ui.label(egui::RichText::new("").size(11.0)); // Expand
                 ui.label(egui::RichText::new("Select").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
                 ui.label(egui::RichText::new("Name/Group").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
-                ui.label(egui::RichText::new("Type").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
+                ui.label(egui::RichText::new("Kind").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
+                ui.label(egui::RichText::new("Cache").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
                 ui.label(egui::RichText::new("Size").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
                 ui.label(egui::RichText::new("Score").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
                 ui.label(egui::RichText::new("Location").size(11.0).strong().color(egui::Color32::from_rgb(140, 140, 150)));
@@ -1150,6 +1151,9 @@ impl ReclaimApp {
                         reclaim_core::grouping::GroupType::Single => "📄 Single",
                     };
                     ui.label(type_label);
+                    
+                    // Empty cache column for group header
+                    ui.label("");
                     
                     // Size with color
                     let size_text = reclaim_core::candidate::human_bytes(group.total_size);
@@ -1263,7 +1267,12 @@ impl ReclaimApp {
                                     .to_string();
                                 ui.label(egui::RichText::new(&filename).color(egui::Color32::from_rgb(180, 180, 190)));
                                 
-                                // Type badge
+                                // Kind badge (artifact type)
+                                ui.label(egui::RichText::new(c.candidate.kind.label())
+                                    .size(10.0)
+                                    .color(egui::Color32::from_rgb(100, 180, 220)));
+                                
+                                // Cache status badge
                                 ui.label(c.cache_status.badge());
                                 
                                 // Size
