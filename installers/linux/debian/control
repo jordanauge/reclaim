@@ -1,0 +1,18 @@
+Package: reclaim
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Jordan Augé <your@email.com>
+Description: Modern disk space analyzer
+ Reclaim is a modern, intelligent disk space analyzer with:
+ - Fast scanning with SQLite caching
+ - Smart grouping of duplicate files
+ - Full disk space categorization
+ - Native GUI with treemap visualization
+ - Permission-aware scanning (Full Disk Access on macOS)
+ .
+ This is the system package version (auto-update disabled).
+ Update via: sudo apt update && sudo apt upgrade reclaim
+Depends: libc6 (>= 2.31), libgcc-s1 (>= 3.0), libstdc++6 (>= 10)
+Homepage: https://github.com/jordanauge/reclaim

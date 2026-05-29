@@ -1,0 +1,51 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Environment
+.env
+*.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build artifacts
+*.dmg
+*.AppImage
+*.deb
+*.zip
+*.exe
+*.app
+*.rpm
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.bak
+*.old
+*.tmp
+
+# macOS app bundle (generated)
+target/release/Reclaim.app/
+target/release/*.app/
+target/release/dmg-staging/
+target/release/debian-pkg/
+target/release/AppDir/
+target/release/windows-portable/
+
+# AppImage tool
+target/release/appimagetool-*.AppImage
+
+# Distribution artifacts in target/release
+target/release/*.dmg
+target/release/*.AppImage
+target/release/*.deb
+target/release/*.zip

@@ -1,0 +1,15 @@
+[package]
+name    = "reclaim-tui"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "reclaim-tui"
+path = "src/main.rs"
+
+[dependencies]
+reclaim-core = { path = "../reclaim-core" }
+anyhow.workspace    = true
+ratatui.workspace   = true
+crossterm.workspace = true
+dirs.workspace      = true

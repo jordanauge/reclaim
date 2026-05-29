@@ -1,0 +1,17 @@
+[package]
+name    = "reclaim-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "reclaim"
+path = "src/main.rs"
+
+[dependencies]
+reclaim-core = { path = "../reclaim-core" }
+anyhow.workspace      = true
+clap.workspace        = true
+serde.workspace       = true
+serde_json.workspace  = true
+toml.workspace        = true
+dirs.workspace        = true

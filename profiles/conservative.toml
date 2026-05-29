@@ -1,0 +1,68 @@
+name        = "conservative"
+description = "Only old (≥30 d), clearly reproducible artifacts ≥100 MB. Minimum risk."
+min_age_days   = 30
+# min_size_bytes is optional - when present, it's a scan-time optimization to skip smaller files.
+# When omitted, everything is scanned and you can filter by size in the UI later.
+min_size_bytes = 104857600   # 100 MB (scan optimization)
+exclude_paths  = []
+
+[targets.venv]
+enabled      = true
+min_age_days = 60
+
+[targets.build]
+enabled      = true
+min_age_days = 30
+
+[targets.pip_cache]
+enabled      = true
+min_age_days = 7
+
+[targets.brew_cache]
+enabled      = true
+min_age_days = 0
+
+[targets.npm]
+enabled      = true
+min_age_days = 60
+
+[targets.docker]
+enabled      = false
+
+[targets.logs]
+enabled      = false
+
+[targets.vscode_chats]
+enabled      = true
+min_age_days = 60
+
+[targets.vscode-workspace]
+enabled      = true
+min_age_days = 30  # Delete orphaned workspaces after 30 days
+
+[targets.cisco-logs]
+enabled      = true
+min_age_days = 7   # Cisco logs grow fast, clean after 1 week
+
+[targets.browser-cache]
+enabled      = true
+min_age_days = 30  # Browser caches refill on use
+
+[targets.large-archives]
+enabled      = true
+min_age_days = 30   # Archives older than 30 days
+min_size_bytes = 104857600  # 100 MB minimum
+
+[targets.vscode-extensions]
+enabled      = true
+min_age_days = 30   # Extension data/cache older than 30 days
+min_size_bytes = 52428800  # 50 MB minimum
+
+[targets.large-files]
+enabled      = true
+min_age_days = 30   # Large files older than 30 days
+min_size_bytes = 104857600  # 100 MB minimum (plugin enforces this)
+
+[targets.xcode_derived_data]
+enabled      = true
+min_age_days = 30

@@ -1,0 +1,51 @@
+name        = "aggressive"
+description = "Maximum reclaim. Cleans everything reproducible regardless of age."
+min_age_days   = 0
+# min_size_bytes is optional - when present, it's a scan-time optimization to skip smaller files.
+# For aggressive cleanup, we keep 1MB threshold to avoid millions of tiny files.
+min_size_bytes = 1048576   # 1 MB (scan optimization)
+exclude_paths  = []
+
+[targets.venv]
+enabled        = true
+min_age_days   = 0
+default_action = "delete"
+
+[targets.build]
+enabled        = true
+min_age_days   = 0
+default_action = "delete"
+
+[targets.pip_cache]
+enabled        = true
+min_age_days   = 0
+default_action = "delete"
+
+[targets.brew_cache]
+enabled        = true
+min_age_days   = 0
+default_action = "delete"
+
+[targets.npm]
+enabled        = true
+min_age_days   = 0
+default_action = "delete"
+
+[targets.docker]
+enabled        = true
+min_age_days   = 0
+
+[targets.logs]
+enabled        = true
+min_age_days   = 7
+default_action = "delete"
+
+[targets.vscode_chats]
+enabled        = true
+min_age_days   = 30
+default_action = "delete"
+
+[targets.xcode_derived_data]
+enabled        = true
+min_age_days   = 7
+default_action = "delete"

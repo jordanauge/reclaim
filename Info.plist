@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>Reclaim</string>
+    <key>CFBundleExecutable</key>
+    <string>reclaim-gui</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.reclaim.app</string>
+    <key>CFBundleName</key>
+    <string>Reclaim</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.15</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSRequiresAquaSystemAppearance</key>
+    <false/>
+    
+    <!-- Full Disk Access Permission -->
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>Reclaim needs Full Disk Access to scan all directories including system caches, browser data, and protected folders to identify reclaimable disk space.</string>
+    
+    <!-- File Access Permissions -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Reclaim needs to access files to calculate disk usage and identify items that can be safely deleted.</string>
+    
+    <!-- Additional Entitlements for Full Disk Access -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+</dict>
+</plist>

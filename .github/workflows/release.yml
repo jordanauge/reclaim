@@ -1,0 +1,174 @@
+name: Release Builds
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # macOS builds (Intel + Apple Silicon)
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target:
+          - x86_64-apple-darwin
+          - aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      
+      - name: Build release binary
+        run: cargo build --release --target ${{ matrix.target }}
+      
+      - name: Create app bundle
+        run: |
+          ./create-macos-app.sh
+          # Rename based on architecture
+          if [ "${{ matrix.target }}" = "aarch64-apple-darwin" ]; then
+            SUFFIX="silicon"
+          else
+            SUFFIX="intel"
+          fi
+          mv target/release/Reclaim.app "Reclaim-macos-${SUFFIX}.app"
+      
+      - name: Create DMG
+        run: |
+          if [ "${{ matrix.target }}" = "aarch64-apple-darwin" ]; then
+            SUFFIX="silicon"
+          else
+            SUFFIX="intel"
+          fi
+          VERSION="${GITHUB_REF_NAME#v}"
+          ./installers/macos/create-dmg.sh "$VERSION" "$SUFFIX"
+      
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.target }}
+          path: target/release/*.dmg
+
+  # Linux builds (x86_64)
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libxcb-render0-dev libxcb-shape0-dev \
+            libxcb-xfixes0-dev libxkbcommon-dev libssl-dev fuse libfuse2
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Build release binary
+        run: cargo build --release
+      
+      - name: Create AppImage
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          chmod +x installers/linux/create-appimage.sh
+          ./installers/linux/create-appimage.sh "$VERSION"
+      
+      - name: Create Debian package
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          chmod +x installers/linux/create-deb.sh
+          ./installers/linux/create-deb.sh "$VERSION"
+      
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x86_64
+          path: |
+            target/release/*.AppImage
+            target/release/*.deb
+
+  # Windows build (x86_64)
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Build release binary
+        run: cargo build --release
+      
+      - name: Create portable ZIP
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          chmod +x installers/windows/create-portable.sh
+          ./installers/windows/create-portable.sh "$VERSION"
+      
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x86_64
+          path: target/release/*.zip
+
+  # Create GitHub Release
+  create-release:
+    name: Create Release
+    needs: [build-macos, build-linux, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/**/*.dmg
+            artifacts/**/*.AppImage
+            artifacts/**/*.deb
+            artifacts/**/*.zip
+          draft: true
+          generate_release_notes: true
+          body: |
+            ## Installation
+
+            ### macOS
+            - **Apple Silicon (M1/M2/M3)**: Download `Reclaim-*-macos-silicon.dmg`
+            - **Intel**: Download `Reclaim-*-macos-intel.dmg`
+            - Open DMG, drag to Applications
+            - Grant Full Disk Access: System Settings → Privacy & Security → Full Disk Access
+            - **Auto-update**: ✅ Enabled
+
+            ### Linux
+            - **AppImage** (recommended): Download `Reclaim-*-linux-x86_64.AppImage`
+              - `chmod +x Reclaim-*.AppImage && ./Reclaim-*.AppImage`
+              - **Auto-update**: ✅ Enabled
+            - **Debian/Ubuntu**: Download `reclaim_*_amd64.deb`
+              - `sudo dpkg -i reclaim_*.deb`
+              - **Auto-update**: ❌ Disabled - use `sudo apt upgrade reclaim`
+
+            ### Windows
+            - **Portable**: Download `Reclaim-*-windows-portable.zip`
+              - Extract and run `Reclaim.exe`
+              - **Auto-update**: ✅ Enabled
+
+            ## Changelog
+            See below for detailed changes.

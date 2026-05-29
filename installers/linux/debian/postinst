@@ -1,0 +1,36 @@
+#!/bin/bash
+# Debian package post-installation script
+
+set -e
+
+# Create marker file to indicate system package installation
+# This disables auto-update (updater module checks for this)
+touch /var/lib/dpkg/info/reclaim.list
+
+# Create desktop entry if not exists
+if [ ! -f /usr/share/applications/reclaim.desktop ]; then
+    cat > /usr/share/applications/reclaim.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Reclaim
+Comment=Modern Disk Space Analyzer
+Exec=/usr/bin/reclaim
+Icon=reclaim
+Categories=Utility;System;
+Terminal=false
+EOF
+fi
+
+# Update desktop database
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications || true
+fi
+
+echo "✅ Reclaim installed successfully"
+echo ""
+echo "📍 To run: reclaim (or search 'Reclaim' in your application menu)"
+echo ""
+echo "🔄 Updates: Use apt to update"
+echo "   sudo apt update && sudo apt upgrade reclaim"
+
+exit 0

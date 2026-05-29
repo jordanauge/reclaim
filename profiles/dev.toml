@@ -1,0 +1,45 @@
+name        = "dev"
+description = "Tuned for a typical macOS dev machine. Cleans old perso/ venvs and caches."
+min_age_days   = 14
+# min_size_bytes is optional - when present, it's a scan-time optimization to skip smaller files.
+# Omit this field to scan everything and filter by size in the UI.
+min_size_bytes = 52428800   # 50 MB (scan optimization)
+exclude_paths  = [
+    "~/repos/cisco-eti/**",
+    "~/repos/mas-framework/**",
+    "~/repos/claris/**",
+]
+
+[targets.venv]
+enabled      = true
+min_age_days = 14
+
+[targets.build]
+enabled      = true
+min_age_days = 7
+
+[targets.pip_cache]
+enabled      = true
+min_age_days = 0
+
+[targets.brew_cache]
+enabled      = true
+min_age_days = 0
+
+[targets.npm]
+enabled      = true
+min_age_days = 30
+
+[targets.docker]
+enabled      = false
+
+[targets.logs]
+enabled      = false
+
+[targets.vscode_chats]
+enabled      = true
+min_age_days = 30
+
+[targets.xcode_derived_data]
+enabled      = true
+min_age_days = 14
