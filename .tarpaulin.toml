@@ -1,0 +1,31 @@
+[coverage]
+# Don't count test code in coverage
+ignore-tests = true
+
+# Exclude GUI from coverage (hard to test)
+exclude-files = [
+    "crates/reclaim-gui/*",
+    "crates/reclaim-cli/*",
+    "crates/reclaim-tui/*",
+]
+
+# Minimum target coverage percentage
+target-coverage = 70
+
+# Fail CI if below target
+fail-under = 70
+
+# Output formats
+output = ["Html", "Lcov"]
+
+# Output directory
+output-dir = "coverage"
+
+# Timeout for each test
+timeout = "5m"
+
+# Run with all features enabled
+all-features = true
+
+# Workspace mode
+workspace = true
