@@ -2852,6 +2852,67 @@ impl eframe::App for ReclaimApp {
                     
                     ui.add_space(15.0);
                     ui.separator();
+                    ui.label("Updates");
+                    ui.add_space(5.0);
+                    
+                    // Show install method and update availability
+                    match self.install_method {
+                        updater::InstallMethod::Standalone => {
+                            ui.label("📦 Standalone installation");
+                            ui.add_space(3.0);
+                            ui.label(egui::RichText::new("Auto-update: Enabled")
+                                .color(egui::Color32::from_rgb(76, 175, 80)));
+                            ui.add_space(5.0);
+                            
+                            if let Some(ref version) = self.update_available {
+                                ui.colored_label(
+                                    egui::Color32::from_rgb(120, 220, 255),
+                                    format!("🔄 Update available: {}", version)
+                                );
+                                if ui.button("Download & Install").clicked() {
+                                    // TODO: Implement actual update download
+                                    self.status_message = format!("Update to {} would be downloaded", version);
+                                }
+                            } else if self.checking_update {
+                                ui.label("⏳ Checking for updates...");
+                            } else {
+                                ui.label("✓ You're up to date");
+                                if ui.button("Check for Updates").clicked() {
+                                    // TODO: Implement update check
+                                    self.checking_update = true;
+                                    self.status_message = "Checking for updates...".to_string();
+                                }
+                            }
+                        }
+                        updater::InstallMethod::SystemPackage => {
+                            ui.label("📦 System package installation");
+                            ui.add_space(3.0);
+                            ui.label(egui::RichText::new("Auto-update: Disabled")
+                                .color(egui::Color32::from_rgb(180, 180, 190)));
+                            ui.add_space(5.0);
+                            
+                            ui.label("Update via your package manager:");
+                            ui.add_space(3.0);
+                            
+                            #[cfg(target_os = "macos")]
+                            {
+                                ui.code("brew upgrade reclaim");
+                            }
+                            
+                            #[cfg(target_os = "linux")]
+                            {
+                                ui.code("sudo apt update && sudo apt upgrade reclaim");
+                            }
+                            
+                            #[cfg(target_os = "windows")]
+                            {
+                                ui.code("winget upgrade reclaim");
+                            }
+                        }
+                    }
+                    
+                    ui.add_space(15.0);
+                    ui.separator();
                     ui.add_space(10.0);
                     
                     if ui.button("Close").clicked() {
