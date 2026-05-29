@@ -7,6 +7,7 @@ Background scanning with persistent cache that maintains user selections across 
 ## Data Model
 
 ### SelectionMode
+
 ```rust
 pub enum SelectionMode {
     Auto,    // System-controlled based on score
@@ -15,6 +16,7 @@ pub enum SelectionMode {
 ```
 
 ### SelectionState  
+
 ```rust
 pub enum SelectionState {
     Unchecked,
@@ -24,6 +26,7 @@ pub enum SelectionState {
 ```
 
 ### CandidateState
+
 ```rust
 pub struct CandidateState {
     pub candidate: Candidate,
@@ -40,6 +43,7 @@ pub struct CandidateState {
 ### Tables
 
 #### `cached_entries`
+
 ```sql
 CREATE TABLE cached_entries (
     path TEXT PRIMARY KEY,
@@ -53,6 +57,7 @@ CREATE INDEX idx_last_seen ON cached_entries(last_seen);
 ```
 
 #### `user_selections`
+
 ```sql
 CREATE TABLE user_selections (
     path TEXT PRIMARY KEY,
@@ -64,6 +69,7 @@ CREATE TABLE user_selections (
 ```
 
 #### `scan_runs`
+
 ```sql
 CREATE TABLE scan_runs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,6 +86,7 @@ CREATE TABLE scan_runs (
 ## Background Scanning Flow
 
 ### 1. Initial Scan
+
 ```
 User clicks Scan
   → Full scan + build cache
@@ -89,6 +96,7 @@ User clicks Scan
 ```
 
 ### 2. User Interactions
+
 ```
 User checks/unchecks item
   → Mark as Manual mode
@@ -97,6 +105,7 @@ User checks/unchecks item
 ```
 
 ### 3. Background Rescan
+
 ```
 Timer triggers (every 5 minutes? configurable)
   → Incremental scan (only changed paths)
@@ -112,6 +121,7 @@ Timer triggers (every 5 minutes? configurable)
 ## UI Components
 
 ### Enhanced Checkbox Widget
+
 ```
 ┌─────────────────────┐
 │ [☑] M  100 MB  venv │  ← Manual, Checked
@@ -121,6 +131,7 @@ Timer triggers (every 5 minutes? configurable)
 ```
 
 ### Update Notification Modal
+
 ```
 ┌──────────────────────────────────────┐
 │  📊 Scan Update Available            │
@@ -134,6 +145,7 @@ Timer triggers (every 5 minutes? configurable)
 ```
 
 ### Highlight Scheme
+
 - **New items**: Yellow background
 - **Changed items**: Blue background  
 - **Manual selections**: Bold text or icon badge
@@ -142,6 +154,7 @@ Timer triggers (every 5 minutes? configurable)
 ## Group State Aggregation
 
 ### Tri-state Logic
+
 ```rust
 fn compute_group_state(children: &[CandidateState]) -> (SelectionState, SelectionMode) {
     let checked_count = children.iter().filter(|c| c.selection_state == Checked).count();
@@ -170,29 +183,34 @@ fn compute_group_state(children: &[CandidateState]) -> (SelectionState, Selectio
 ## Implementation Phases
 
 ### Phase 1: Data Model (1-2 hours)
+
 - [x] Add SelectionMode/SelectionState enums
 - [ ] Wrap Candidate in CandidateState
 - [ ] Update all UI code to use CandidateState
 
 ### Phase 2: SQLite Cache (2-3 hours)
+
 - [ ] Create cache module with rusqlite
 - [ ] Implement cache read/write
 - [ ] Implement incremental scan logic
 - [ ] Change detection (hash comparison)
 
 ### Phase 3: Background Scanning (2-3 hours)
+
 - [ ] Background thread with timer
 - [ ] Send updates via channel
 - [ ] Update notification system
 
 ### Phase 4: UI Updates (3-4 hours)
+
 - [ ] Enhanced checkbox widget
-- [ ] Mode indicator badge (A/M/-) 
+- [ ] Mode indicator badge (A/M/-)
 - [ ] Highlight new/changed items
 - [ ] Update notification modal
 - [ ] Group tri-state display
 
 ### Phase 5: Testing & Polish (2-3 hours)
+
 - [ ] Test manual selection persistence
 - [ ] Test background scan
 - [ ] Test change detection
@@ -226,6 +244,7 @@ auto_update = false  # If true, update view automatically without popup
 ## Technical Considerations
 
 ### Change Detection Algorithm
+
 ```rust
 fn content_hash(path: &Path) -> Result<String> {
     let meta = fs::metadata(path)?;
@@ -238,16 +257,19 @@ fn content_hash(path: &Path) -> Result<String> {
 ```
 
 ### Memory Management
+
 - Only load visible items in UI (lazy loading)
 - Cache stores metadata, not full Candidate objects
 - Background thread has low priority
 
 ### Race Conditions
+
 - Use Arc<Mutex<>> for shared state
 - SQLite with WAL mode for concurrent access
 - Atomic operations for critical sections
 
 ### Error Handling
+
 - Background scan failures don't crash UI
 - Cache corruption → rebuild from scratch
 - Network drive timeouts → skip that root

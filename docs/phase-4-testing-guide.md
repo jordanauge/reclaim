@@ -11,6 +11,7 @@ cargo build --release
 ## Testing Checklist
 
 ### 1. Auto-Scan on Launch ⭐ NEW
+
 - [ ] App launches successfully
 - [ ] Scan starts automatically within 1 second
 - [ ] Status indicator shows "🟢 Scanning..."
@@ -18,11 +19,13 @@ cargo build --release
 - [ ] Progress visible in status bar
 
 ### 2. Default Roots
+
 - [ ] Scan uses default roots: ~/, ~/repos, ~/Projects, ~/Library (macOS)
 - [ ] Check console output or status to verify which roots are being scanned
 - [ ] All default roots that exist are included
 
 ### 3. Scan Status & Controls ⭐ NEW
+
 - [ ] **Scanning state**: "🟢 Scanning..." with [⏸ Pause] button
 - [ ] **Paused state**: "🟡 Paused" with [▶ Resume] button
 - [ ] **Idle state**: "🔵 Idle" with [🔄] refresh button
@@ -32,6 +35,7 @@ cargo build --release
 - [ ] Refresh button triggers new scan from idle
 
 ### 4. Cache Status Badges (Phase 1)
+
 - [ ] **Cards View**: Badge visible next to checkbox
 - [ ] **Compact View**: Badge visible, size shows ~ for estimates
 - [ ] **Table View**: Status column with badges
@@ -39,6 +43,7 @@ cargo build --release
 - [ ] Badge colors: 🟢✓ verified, 🟡~ unverified, 🔵N new, 🟠Δ changed
 
 ### 5. Verification Thread (Phase 2)
+
 - [ ] After scan, verification starts automatically
 - [ ] Status bar shows "Verifying cache... X/Y"
 - [ ] Badges change from 🟡~ (unverified) to 🟢✓ (verified)
@@ -46,6 +51,7 @@ cargo build --release
 - [ ] Final status: "✓ Verified: X unchanged, Y changed, Z unavailable"
 
 ### 5. Hot Paths Discovery (Phase 3)
+
 - [ ] After verification, discovery starts automatically
 - [ ] Status bar shows "Discovering... X paths scanned"
 - [ ] On macOS: Check if Spotlight is used (console output: "Using Spotlight for change detection")
@@ -53,6 +59,7 @@ cargo build --release
 - [ ] Discovery complete message shows new items count
 
 ### 6. Cache Persistence
+
 - [ ] Close app
 - [ ] Relaunch app
 - [ ] Previously discovered items have 🟡~ badge (cached unverified)
@@ -60,6 +67,7 @@ cargo build --release
 - [ ] User selections preserved across restarts
 
 ### 7. Disk Space Analysis
+
 - [ ] Note total disk usage (top of window)
 - [ ] Sort by size (largest first)
 - [ ] Identify top space consumers:
@@ -72,12 +80,14 @@ cargo build --release
 - [ ] Document findings in session memory
 
 ### 8. Performance Benchmarks
+
 - [ ] Measure scan time for full ~/repos
 - [ ] Measure verification time (target: <5s for 10K items)
 - [ ] Measure discovery time
 - [ ] Check memory usage (Activity Monitor)
 
 ### 9. Cleanup Operations (Dry Run First!)
+
 - [ ] Select a few test items
 - [ ] Click "Dry Run" button
 - [ ] Review planned actions
@@ -111,6 +121,7 @@ cargo build --release
 ## Next Steps After Testing
 
 Based on test results, consider:
+
 - Add missing plugin types (Docker, iOS, Simulators, Trash)
 - Improve verification speed for very large datasets
 - Add progress bars for long operations

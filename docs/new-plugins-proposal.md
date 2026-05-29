@@ -9,6 +9,7 @@
 ## Priority 1: High Impact (>1GB each)
 
 ### 1. VS Code Workspace Storage Plugin 🏆 10GB FOUND
+
 **Path**: `~/Library/Application Support/Code/User/workspaceStorage`
 **Size**: 10GB
 **Category**: IDE Cache
@@ -90,6 +91,7 @@ fn check_workspace_orphaned(workspace_json: &Path) -> Result<bool> {
 ---
 
 ### 2. Cisco Logs Plugin 🏆 9.5GB FOUND
+
 **Path**: `~/Library/Logs/Cisco Data Shift.log`
 **Size**: 9.5GB (single file!)
 **Category**: Enterprise Logs
@@ -164,6 +166,7 @@ pub fn scan(root: &Path, profile: &Profile) -> Result<Vec<Candidate>> {
 ---
 
 ### 3. VS Code C++ Tools Cache Plugin 🏆 2.5GB FOUND
+
 **Path**: `~/Library/Caches/vscode-cpptools`
 **Size**: 2.5GB
 **Category**: IDE Language Server Cache
@@ -208,6 +211,7 @@ pub fn scan(root: &Path, profile: &Profile) -> Result<Vec<Candidate>> {
 ---
 
 ### 4. Playwright Browsers Plugin 🎭 1GB FOUND
+
 **Path**: `~/Library/Caches/ms-playwright`
 **Size**: 1GB
 **Category**: Browser Automation
@@ -252,7 +256,9 @@ pub fn scan(root: &Path, profile: &Profile) -> Result<Vec<Candidate>> {
 ---
 
 ### 5. Browser Caches Plugin 🌐 2GB FOUND
-**Paths**: 
+
+**Paths**:
+
 - `~/Library/Caches/Google` (1.3GB)
 - `~/Library/Caches/Mozilla` (502MB)
 - `~/Library/Caches/Firefox` (107MB)
@@ -317,6 +323,7 @@ pub fn scan(root: &Path, profile: &Profile) -> Result<Vec<Candidate>> {
 ## Priority 2: Medium Impact (100MB-1GB)
 
 ### 6. Discord Cache Plugin 💬 445MB FOUND
+
 **Path**: `~/Library/Caches/com.hnc.Discord.ShipIt`
 **Size**: 445MB
 **Category**: App Cache
@@ -328,32 +335,39 @@ let discord_cache = caches.join("com.hnc.Discord.ShipIt");
 ```
 
 ### 7. Spark Email Logs Plugin 📧 521MB FOUND
+
 **Path**: `~/Library/Logs/SparkMacDesktop`
 **Size**: 521MB
 **Category**: Email Client Logs
 
 ### 8. TypeScript Compiler Cache 📘 86MB FOUND
+
 **Path**: `~/Library/Caches/typescript`
 **Size**: 86MB
 **Category**: Compiler Cache
 **Reproducibility**: 1.0
 
 ### 9. node-gyp Cache ⚙️ 125MB FOUND
+
 **Path**: `~/Library/Caches/node-gyp`
 **Size**: 125MB
 **Category**: Build Tools
 
 ### 10. Bazelisk Cache 🏗️ 50MB FOUND
+
 **Path**: `~/Library/Caches/bazelisk`
 **Size**: 50MB
 **Category**: Build Tools
 
 ### 11. Go Tools Cache 🐹 28MB FOUND
+
 **Paths**:
+
 - `~/Library/Caches/gopls` (14MB)
 - `~/Library/Caches/goimports` (14MB)
 
 ### 12. OneDrive Logs ☁️ 60MB FOUND
+
 **Path**: `~/Library/Logs/OneDrive`
 **Size**: 60MB
 **Category**: Cloud Storage Logs
@@ -363,6 +377,7 @@ let discord_cache = caches.join("com.hnc.Discord.ShipIt");
 ## Implementation Plan
 
 ### Phase 1: Quick Wins (Week 1)
+
 1. ✅ VS Code Workspace Storage (10GB)
 2. ✅ Cisco Logs (9.5GB)
 3. ✅ Browser Caches (2GB)
@@ -370,23 +385,26 @@ let discord_cache = caches.join("com.hnc.Discord.ShipIt");
 **Total**: 21.5GB with 3 plugins
 
 ### Phase 2: Language Tools (Week 2)
+
 4. ✅ VS Code C++ Tools (2.5GB)
-5. ✅ Playwright (1GB)
-6. ✅ TypeScript Cache (86MB)
-7. ✅ node-gyp (125MB)
+2. ✅ Playwright (1GB)
+3. ✅ TypeScript Cache (86MB)
+4. ✅ node-gyp (125MB)
 
 **Total**: +3.7GB with 4 plugins
 
 ### Phase 3: App Caches (Week 3)
+
 8. ✅ Discord (445MB)
-9. ✅ Spark Logs (521MB)
-10. ✅ OneDrive Logs (60MB)
+2. ✅ Spark Logs (521MB)
+3. ✅ OneDrive Logs (60MB)
 
 **Total**: +1GB with 3 plugins
 
 ### Phase 4: Build Tools (Week 4)
+
 11. ✅ Bazelisk (50MB)
-12. ✅ Go Tools (28MB)
+2. ✅ Go Tools (28MB)
 
 **Total**: +78MB with 2 plugins
 

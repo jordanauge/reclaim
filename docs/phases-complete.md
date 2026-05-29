@@ -9,6 +9,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 **Goal**: Visual cache status indicators in all views
 
 **Implementation**:
+
 - Added `CacheStatus` enum with 5 states:
   - ⚪ ? Unknown (never seen)
   - 🟡 ~ CachedUnverified (in cache, not verified this session)
@@ -23,6 +24,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
   - **Tree View**: Badges in grouped items
 
 **User Experience**:
+
 - Users see verification status at a glance
 - Understand which data is fresh vs cached
 - Size estimates show ~ prefix when unverified
@@ -32,6 +34,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 **Goal**: Background verification of cached entries via stat()
 
 **Implementation**:
+
 - Created `verifier.rs` module with `Tier1Verifier`
 - Spawns background thread on app startup
 - Quickly verifies each cached candidate using stat()
@@ -40,11 +43,13 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 - Sends progress updates: "Verifying cache... X/Y"
 
 **Performance**:
+
 - Target: 2-5 seconds for 10,000 candidates
 - Uses shallow directory scanning (trades accuracy for speed)
 - Non-blocking - GUI remains responsive
 
 **User Experience**:
+
 - Automatic verification on launch
 - Status bar shows progress
 - Final summary: "✓ Verified: X unchanged, Y changed, Z unavailable"
@@ -54,6 +59,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 **Goal**: Find new candidates without full rescan
 
 **Implementation**:
+
 - Created `discoverer.rs` module with `HotPathsDiscoverer`
 - Two-strategy approach:
   1. **System Indexer** (150x speedup): Spotlight/updatedb/Baloo
@@ -64,11 +70,13 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 - Merges new candidates into existing list
 
 **Hot Paths**:
+
 - Common: Downloads, Desktop, Documents
 - Development: repos, Projects, Code, git
 - Caches: .cache, Library/Caches, Library/Developer
 
 **User Experience**:
+
 - Automatic discovery after verification
 - Status bar: "Discovering... X paths scanned"
 - On macOS: Uses Spotlight for 150x speedup
@@ -79,6 +87,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 **Goal**: Validate architecture on real disk, identify space consumers
 
 **What to Test**:
+
 1. **Cache Persistence**: Close/reopen app, verify selections preserved
 2. **Performance**: Measure scan/verify/discover times
 3. **Space Analysis**: Identify top consumers (Xcode? node_modules? Docker?)
@@ -86,6 +95,7 @@ All 4 phases of the progressive cache architecture are now fully implemented and
 5. **Badge Accuracy**: Verify status indicators reflect reality
 
 **Launch**:
+
 ```bash
 cd ~/repos/perso/reclaim
 ./target/release/reclaim-gui
@@ -183,6 +193,7 @@ cd ~/repos/perso/reclaim
 ## Files Changed
 
 ### Core Library
+
 - `crates/reclaim-core/src/lib.rs` - Added verifier + discoverer modules
 - `crates/reclaim-core/src/selection.rs` - Added CacheStatus enum
 - `crates/reclaim-core/src/verifier.rs` - **NEW** Tier 1 verification
@@ -190,13 +201,16 @@ cd ~/repos/perso/reclaim
 - `crates/reclaim-core/Cargo.toml` - Added crossbeam-channel
 
 ### GUI Application
+
 - `crates/reclaim-gui/src/main.rs` - Integrated all 3 threads, badges in all views
 - `crates/reclaim-gui/Cargo.toml` - Added chrono dependency
 
 ### Workspace
+
 - `Cargo.toml` - Added crossbeam-channel to workspace
 
 ### Documentation
+
 - `docs/phase-4-testing-guide.md` - **NEW** Testing checklist
 - `docs/phases-complete.md` - **NEW** This summary
 
@@ -227,6 +241,7 @@ $ cargo build --release
 > "I would love to understand why after only a few months it is full"
 
 **This tool will now**:
+
 - Show all reclaimable space by category
 - Sort by size/score/age
 - Identify reproducible artifacts safely deletable

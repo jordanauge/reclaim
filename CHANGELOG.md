@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-05-29
 
 ### Added
+
 - Initial release of Reclaim
 - **Multi-platform support**: macOS (Intel + Apple Silicon), Linux (x86_64), Windows (x86_64)
 - **Native GUI** with egui: Modern dark theme, 60 FPS rendering
@@ -21,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **SQLite cache**: Instant load of top 1000 items (<1s), persistent between runs
 - **Multi-phase scanning**: Cache → Verify → Full Scan → Disk Analysis
 - **Plugin system**: 11+ detectors for common artifacts
-  - Python venv, __pycache__
+  - Python venv, **pycache**
   - Node.js node_modules
   - Rust target/ directories
   - Docker build caches
@@ -43,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Genealogy explorer**: View folder hierarchy and siblings
 
 ### Distribution
+
 - **macOS**: DMG installer with drag-to-Applications
 - **Linux**: AppImage (standalone) + Debian package (.deb)
 - **Windows**: Portable ZIP
@@ -50,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Code signing scripts**: For macOS (sign.sh, notarize.sh)
 
 ### Documentation
+
 - Comprehensive README with installation instructions
 - DISTRIBUTION.md with packaging guidelines
 - MACOS_PERMISSIONS.md for Full Disk Access setup

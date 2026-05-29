@@ -5,6 +5,7 @@ This document explains how Reclaim is built, packaged, and distributed across pl
 ## Architecture
 
 Reclaim uses a **smart update detection system**:
+
 - **Standalone binaries** (AppImage, DMG, portable ZIP): Auto-update **ENABLED**
 - **System packages** (apt, flatpak, snap, homebrew): Auto-update **DISABLED**
 
@@ -15,6 +16,7 @@ The app detects its installation method at runtime and adapts behavior according
 ### macOS
 
 #### Formats
+
 1. **DMG** (Recommended): Drag-to-Applications installer
    - Auto-update: ✅ Yes
    - Location: `/Applications/Reclaim.app`
@@ -25,6 +27,7 @@ The app detects its installation method at runtime and adapts behavior according
    - Command: `brew install --cask reclaim`
 
 #### Build Steps
+
 ```bash
 # 1. Build release binary
 cargo build --release --target aarch64-apple-darwin  # Apple Silicon
@@ -44,6 +47,7 @@ cargo build --release --target x86_64-apple-darwin   # Intel
 ```
 
 #### Distribution Requirements
+
 - **Full Disk Access**: Required for complete system scanning
 - **Code Signing**: Optional but recommended (Apple Developer ID)
 - **Notarization**: Required to avoid Gatekeeper warnings
@@ -51,6 +55,7 @@ cargo build --release --target x86_64-apple-darwin   # Intel
 ### Linux
 
 #### Formats
+
 1. **AppImage** (Recommended): Portable, standalone
    - Auto-update: ✅ Yes
    - No installation needed
@@ -64,6 +69,7 @@ cargo build --release --target x86_64-apple-darwin   # Intel
    - Auto-update: ❌ No (managed by flatpak)
 
 #### Build Steps
+
 ```bash
 # AppImage (standalone)
 cargo build --release
@@ -75,6 +81,7 @@ cargo build --release
 ```
 
 #### Dependencies
+
 - `libgtk-3-dev`: GUI framework
 - `libxcb-*`: X11 integration
 - `fuse`: AppImage runtime
@@ -82,6 +89,7 @@ cargo build --release
 ### Windows
 
 #### Formats
+
 1. **Portable ZIP** (Recommended): Extract and run
    - Auto-update: ✅ Yes
    - No installation needed
@@ -92,6 +100,7 @@ cargo build --release
    - Script: `installers/windows/installer.nsi`
 
 #### Build Steps
+
 ```bash
 # Cross-compile from macOS/Linux
 cargo build --release --target x86_64-pc-windows-gnu
@@ -109,9 +118,11 @@ makensis installers/windows/installer.nsi
 ## Automated Releases (GitHub Actions)
 
 ### Workflow
+
 `.github/workflows/release.yml` automatically builds for all platforms on version tags.
 
 ### Trigger
+
 ```bash
 # Create and push version tag
 git tag v0.1.0
@@ -119,7 +130,9 @@ git push origin v0.1.0
 ```
 
 ### Artifacts
+
 GitHub Actions builds and uploads:
+
 - `Reclaim-v0.1.0-macos-silicon.dmg`
 - `Reclaim-v0.1.0-macos-intel.dmg`
 - `Reclaim-v0.1.0-linux-x86_64.AppImage`
@@ -127,6 +140,7 @@ GitHub Actions builds and uploads:
 - `Reclaim-v0.1.0-windows-portable.zip`
 
 ### Release Process
+
 1. Workflow runs on tag push
 2. Builds all platforms in parallel
 3. Creates draft GitHub Release
@@ -136,6 +150,7 @@ GitHub Actions builds and uploads:
 ## Update Detection Logic
 
 ### Install Method Detection
+
 ```rust
 pub fn detect_install_method() -> InstallMethod {
     // Linux
@@ -162,6 +177,7 @@ pub fn detect_install_method() -> InstallMethod {
 ```
 
 ### Update Behavior
+
 ```rust
 if install_method.can_auto_update() {
     // Check GitHub releases
@@ -176,6 +192,7 @@ if install_method.can_auto_update() {
 ## Distribution Checklist
 
 ### Before Release
+
 - [ ] Update version in `Cargo.toml`
 - [ ] Update `CHANGELOG.md`
 - [ ] Test builds on all platforms
@@ -183,6 +200,7 @@ if install_method.can_auto_update() {
 - [ ] Test system package installation
 
 ### Release Steps
+
 1. **Create tag**: `git tag v0.1.0 && git push origin v0.1.0`
 2. **Wait for CI**: GitHub Actions builds all platforms (~20 min)
 3. **Review draft**: Check artifacts in draft release
@@ -190,6 +208,7 @@ if install_method.can_auto_update() {
 5. **Publish release**: Make it public
 
 ### Post-Release
+
 - [ ] Test downloads on each platform
 - [ ] Verify auto-update works (standalone)
 - [ ] Update documentation
@@ -198,6 +217,7 @@ if install_method.can_auto_update() {
 ## Local Testing
 
 ### Test Auto-Update Detection
+
 ```bash
 # Build and run
 cargo build --release
@@ -211,6 +231,7 @@ cargo build --release
 ### Test Package Installs
 
 #### macOS DMG
+
 ```bash
 ./installers/macos/create-dmg.sh v0.1.0-test
 open target/release/Reclaim-v0.1.0-test-macos-silicon.dmg
@@ -218,6 +239,7 @@ open target/release/Reclaim-v0.1.0-test-macos-silicon.dmg
 ```
 
 #### Linux AppImage
+
 ```bash
 ./installers/linux/create-appimage.sh v0.1.0-test
 chmod +x target/release/Reclaim-*.AppImage
@@ -226,6 +248,7 @@ chmod +x target/release/Reclaim-*.AppImage
 ```
 
 #### Debian Package
+
 ```bash
 ./installers/linux/create-deb.sh v0.1.0-test
 sudo dpkg -i target/release/reclaim_*.deb
@@ -237,20 +260,24 @@ reclaim
 ## Troubleshooting
 
 ### macOS: "App is damaged" error
+
 - **Cause**: App not signed/notarized
 - **Fix**: Right-click → Open, or disable Gatekeeper temporarily
 - **Proper fix**: Code sign + notarize
 
 ### Linux: AppImage won't run
+
 - **Cause**: Missing FUSE
 - **Fix**: `sudo apt install fuse libfuse2`
 
 ### Windows: "Windows protected your PC"
+
 - **Cause**: Executable not signed
 - **Fix**: Click "More info" → "Run anyway"
 - **Proper fix**: Code sign with certificate
 
 ### Auto-update not working
+
 - **Check**: Install method detection
 - **Debug**: Run with `RUST_LOG=debug` to see updater logs
 - **Verify**: GitHub releases exist and are accessible
@@ -258,6 +285,7 @@ reclaim
 ## Future Enhancements
 
 ### Planned
+
 - [ ] Homebrew formula for macOS
 - [ ] Flatpak manifest for Linux
 - [ ] Windows MSI installer
@@ -265,6 +293,7 @@ reclaim
 - [ ] Chocolatey package for Windows
 
 ### Nice to Have
+
 - [ ] Delta updates (download only changed parts)
 - [ ] Background update downloads
 - [ ] Rollback on failed update
@@ -273,6 +302,7 @@ reclaim
 ## Contributing
 
 When adding new distribution formats:
+
 1. Update `detect_install_method()` in `src/updater/mod.rs`
 2. Add build script to `installers/`
 3. Update `.github/workflows/release.yml`

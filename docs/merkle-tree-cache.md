@@ -3,6 +3,7 @@
 ## Problem Statement
 
 File system `mtime` on directories is unreliable for detecting deep changes:
+
 - ✅ Changes when direct children are added/removed
 - ❌ Doesn't change when files in subdirectories are modified
 - Result: Can't trust directory mtime for incremental scanning
@@ -277,26 +278,31 @@ std::thread::spawn(move || {
 ## Implementation Phases
 
 ### Phase 1: Add CacheStatus enum (30 min)
+
 - [ ] Add CacheStatus to CandidateState
 - [ ] Update selection.rs
 - [ ] Add badge rendering in GUI
 
 ### Phase 2: Merkle hash computation (1 hour)
+
 - [ ] Implement compute_merkle_hash()
 - [ ] Add merkle_cache table to SQLite
 - [ ] Store hashes on scan
 
 ### Phase 3: Incremental scan (1-2 hours)
+
 - [ ] Hash comparison logic
 - [ ] Detect new/changed/verified
 - [ ] Update cache on changes
 
 ### Phase 4: Background verification (1 hour)
+
 - [ ] Worker thread for verification
 - [ ] Lazy verification on view
 - [ ] Progress indicators
 
 ### Phase 5: UI integration (1 hour)
+
 - [ ] Status badges in all views
 - [ ] Color coding
 - [ ] Filter by cache status

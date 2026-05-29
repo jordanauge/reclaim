@@ -585,6 +585,7 @@ auto_apply_updates = false
 ## Summary
 
 This design:
+
 - ✅ Shows data **instantly** on launch (from cache)
 - ✅ Verifies quickly in background (seconds, not minutes)
 - ✅ Discovers most new items automatically (hot paths)

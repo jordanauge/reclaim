@@ -25,21 +25,23 @@ pub struct CandidateState {
 
 ### 2. **Smart Prioritization** ([priority.rs](../crates/reclaim-core/src/priority.rs))
 
-#### Two Heuristics:
+#### Two Heuristics
 
 **First Scan** - Maximize large file discovery:
+
 - node_modules, target, .venv, build: **+50 pts**
 - repos/, projects/, workspace/: **+30 pts**
 - cache/, deriveddata/: **+40 pts**
 - Penalty for media, system folders
 
 **Rescan** - Maximize change detection:
-- target/debug, __pycache__: **+60 pts**
+
+- target/debug, **pycache**: **+60 pts**
 - node_modules, .venv: **+50 pts**
 - tmp/, cache/: **+55 pts**
 - Time factor: older scans get higher priority (×2 max)
 
-#### Progressive Phases:
+#### Progressive Phases
 
 ```rust
 pub enum ScanPhase {
@@ -82,13 +84,15 @@ CREATE TABLE candidates_cache (
 ```
 
 Methods:
+
 - `merge_scan_results()` - Integrates new scan with cache
 - `save_user_selections()` - Persists manual selections
 - `purge_old_entries()` - Cleanup old cache
 
 ### 5. **GUI Integration** ([reclaim-gui/src/main.rs](../crates/reclaim-gui/src/main.rs))
 
-#### Update Banner (not modal):
+#### Update Banner (not modal)
+
 ```
 ╔════════════════════════════════════════════════════════╗
 ║ 📊 Scan Update Available                              ║
@@ -97,14 +101,16 @@ Methods:
 ╚════════════════════════════════════════════════════════╝
 ```
 
-#### Tab Bar for Views:
+#### Tab Bar for Views
+
 ```
 [📊 Table] [🎴 Cards] [📋 Compact] [🌳 Tree]
 ```
 
 ## 🎯 User Experience Flow
 
-### On App Launch:
+### On App Launch
+
 ```
 1. Load cache → Display immediately (🟡 unverified)
    ├─ User sees data in <100ms
@@ -126,7 +132,7 @@ Methods:
 5. User can trigger full Deep Scan manually
 ```
 
-### Status Indicators in UI:
+### Status Indicators in UI
 
 | Badge | Meaning | Size Display |
 |-------|---------|--------------|
@@ -138,13 +144,15 @@ Methods:
 
 ## 🔧 User Controls
 
-### In UI:
+### In UI
+
 - **Pause button** - Stop current scan phase
 - **Skip to next phase** - Jump from Quick → Medium → Thorough
 - **Force full scan** - Override heuristics, scan everything
 - **Configure hot paths** - Add/remove priority directories
 
-### Command-line (future):
+### Command-line (future)
+
 ```bash
 reclaim scan --quick              # Stop after Quick phase
 reclaim scan --priority ./mydir   # Scan this dir first
@@ -162,7 +170,8 @@ reclaim scan --full               # Ignore cache, scan everything
 | Hot paths | 3-7s | ~80-90% (likely changes) |
 | Full scan | 5-10min | 100% (everything) |
 
-### Change Detection with Spotlight (macOS):
+### Change Detection with Spotlight (macOS)
+
 ```
 Without plugin: Scan entire ~/repos (50 GB) = 30 seconds
 With Spotlight: Query changes since last scan = 200ms
@@ -172,30 +181,35 @@ Speedup: 150x
 ## 🔮 Next Steps
 
 ### Phase 1: Badges & Visual Indicators (1-2h)
+
 - [ ] Add cache status badges to table view
 - [ ] Add size estimation indicators
 - [ ] Color-code changed items (orange)
 - [ ] Color-code new items (blue)
 
 ### Phase 2: Verification Thread (2-3h)
+
 - [ ] Spawn background thread on app startup
 - [ ] Implement Tier 1 point verification
 - [ ] Update UI progressively as items verify
 - [ ] Show progress in status bar
 
 ### Phase 3: Hot Paths Discovery (2-3h)
+
 - [ ] Implement hot paths scanner
 - [ ] Try system plugins (Spotlight/etc)
 - [ ] Merge discovered items with cache
 - [ ] Trigger banner when changes found
 
 ### Phase 4: User Controls (1-2h)
+
 - [ ] Add pause/resume button
 - [ ] Add "Force Full Scan" button
 - [ ] Add hot paths configuration
 - [ ] Save/load hot paths from config
 
 ### Phase 5: Testing & Optimization (2-3h)
+
 - [ ] Test on real disk with 100GB+ data
 - [ ] Benchmark verification speed
 - [ ] Tune phase thresholds
@@ -212,6 +226,7 @@ Speedup: 150x
 ## 🧪 Example Scenarios
 
 ### Scenario 1: Daily Developer
+
 ```
 Day 1 (first run):
   - Full scan: 5 minutes
@@ -226,6 +241,7 @@ Day 2 (reopening):
 ```
 
 ### Scenario 2: Weekly Cleanup
+
 ```
 Week 1: Scanned, cleaned 20 GB
 Week 2: 
@@ -236,6 +252,7 @@ Week 2:
 ```
 
 ### Scenario 3: After Long Break
+
 ```
 Opened after 2 months:
   - Load cache: instant (but old)

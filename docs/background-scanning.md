@@ -36,6 +36,7 @@ if self.scan_status == ScanStatus::NotStarted {
 ```
 
 **Default roots**:
+
 - `~/` (home directory)
 - `~/repos` (if exists)
 - `~/Projects` (if exists)
@@ -88,11 +89,13 @@ impl FSEventsWatcher {
 ```
 
 **Benefits**:
+
 - Real-time change detection (no polling)
 - Kernel-level monitoring (no syscall overhead)
 - Coalescing of rapid changes (built-in debouncing)
 
 **Trade-offs**:
+
 - macOS only
 - Requires `fseventstream` crate
 - Callback must be Send + Sync
@@ -136,11 +139,13 @@ impl InotifyWatcher {
 ```
 
 **Benefits**:
+
 - Real-time change detection
 - Very low overhead (kernel-level)
 - Standard Linux API
 
 **Trade-offs**:
+
 - Requires recursive watches for directories
 - Watch limit per process (usually 8192)
 - Doesn't track moves across filesystems
@@ -196,12 +201,14 @@ public:
 ```
 
 **Benefits**:
+
 - Baloo indexes automatically
 - Fast queries: `baloosearch "reclaim-candidate AND type:npm-modules"`
 - No duplicate work (Baloo already walking filesystem)
 - Metadata persisted in Baloo database
 
 **Trade-offs**:
+
 - KDE only
 - Requires C++ plugin development
 - Distribution complexity (separate package)
@@ -265,6 +272,7 @@ for entry in walker {
 ```
 
 **UI Control**:
+
 ```
 [⚙️ Configure]
   CPU Limit: [50%] ────────────────○──── [100%]
@@ -274,6 +282,7 @@ for entry in walker {
 ## Implementation Priority
 
 ### High Priority (Next Release)
+
 1. ✅ Auto-scan on launch with default roots
 2. ✅ Pause/Resume controls
 3. ✅ Status indicator in top bar
@@ -281,14 +290,16 @@ for entry in walker {
 5. 🚧 CPU throttling controls
 
 ### Medium Priority
+
 6. 🔮 Periodic refresh scheduler
-7. 🔮 Configurable roots UI (Settings modal)
-8. 🔮 Smart sleep when idle (battery optimization)
+2. 🔮 Configurable roots UI (Settings modal)
+3. 🔮 Smart sleep when idle (battery optimization)
 
 ### Low Priority (Research)
+
 9. 🔮 Baloo plugin development
-10. 🔮 Spotlight extension (if Apple allows)
-11. 🔮 Windows Search integration
+2. 🔮 Spotlight extension (if Apple allows)
+3. 🔮 Windows Search integration
 
 ## Design Principles
 
@@ -301,6 +312,7 @@ for entry in walker {
 ## Why No External Service?
 
 ❌ **Bad**: Separate daemon process
+
 - Requires system service installation (sudo)
 - Launch agent/systemd unit complexity
 - IPC between daemon and GUI
@@ -308,6 +320,7 @@ for entry in walker {
 - Hard to debug
 
 ✅ **Good**: Single-process with threads
+
 - No installation complexity
 - Direct state management
 - Easy debugging
@@ -317,6 +330,7 @@ for entry in walker {
 ## Status Quo Comparison
 
 ### Traditional Approach
+
 ```
 [Install Service] → [Configure launchd/systemd] → [Start Daemon]
      ↓                        ↓                         ↓
@@ -324,6 +338,7 @@ for entry in walker {
 ```
 
 ### Reclaim Approach
+
 ```
 [Launch App] → [Auto-scan starts] → [Use OS indexers]
      ↓                  ↓                    ↓
@@ -332,7 +347,7 @@ for entry in walker {
 
 ## References
 
-- FSEvents: https://developer.apple.com/documentation/coreservices/file_system_events
-- inotify: https://man7.org/linux/man-pages/man7/inotify.7.html
-- Baloo: https://community.kde.org/Baloo
-- ReadDirectoryChangesW: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readdirectorychangesw
+- FSEvents: <https://developer.apple.com/documentation/coreservices/file_system_events>
+- inotify: <https://man7.org/linux/man-pages/man7/inotify.7.html>
+- Baloo: <https://community.kde.org/Baloo>
+- ReadDirectoryChangesW: <https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-readdirectorychangesw>

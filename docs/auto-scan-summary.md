@@ -5,17 +5,21 @@
 Transformed from **manual scan workflow** → **continuous background scanning**
 
 ### Before (Manual)
+
 ```
 [Profile: ▼] [Scan Button]
 ```
+
 - User must click "Scan" to start
 - Roots must be configured manually
 - App sits idle until user action
 
 ### After (Continuous)
+
 ```
 [Profile: ▼] [🟢 Scanning...] [⏸ Pause]
 ```
+
 - Auto-starts on launch
 - Uses intelligent default roots
 - Always working in background
@@ -24,11 +28,13 @@ Transformed from **manual scan workflow** → **continuous background scanning**
 ## UI Changes
 
 ### Removed
+
 - ❌ Manual "Scan" button
 - ❌ Root configuration fields (moved to future Settings)
 
 ### Added
-- ✅ **Status Indicator**: 
+
+- ✅ **Status Indicator**:
   - 🟢 Scanning... (active)
   - 🟡 Paused (user paused)
   - 🔵 Idle (ready)
@@ -42,6 +48,7 @@ Transformed from **manual scan workflow** → **continuous background scanning**
 ### Default Scan Roots
 
 Automatically scans these on launch (if they exist):
+
 - `~/` (home directory)
 - `~/repos` (development projects)
 - `~/Projects` (alternative dev location)
@@ -52,6 +59,7 @@ Automatically scans these on launch (if they exist):
 ### 1. Piggyback on System Services ✅
 
 Already implemented:
+
 - **macOS Spotlight** (150x speedup)
 - **Linux locate/updatedb**
 - **KDE Baloo**
@@ -69,6 +77,7 @@ No external daemon needed - just use what's already there.
 ### 3. Transparent Operation ✅
 
 User always sees what's happening:
+
 - Status indicator in top bar
 - Progress updates during scan
 - Pause when needed (CPU concerns)
@@ -109,6 +118,7 @@ NotStarted ──(auto)──> Scanning ──(user)──> Paused
 ### Future: Real-Time Monitoring
 
 See [background-scanning.md](./background-scanning.md) for detailed plans:
+
 - **macOS FSEvents**: Real-time file changes (kernel-level)
 - **Linux inotify**: Low-overhead change detection
 - **Windows ReadDirectoryChangesW**: Native file monitoring
@@ -118,11 +128,13 @@ See [background-scanning.md](./background-scanning.md) for detailed plans:
 ## Testing
 
 Launch and verify:
+
 ```bash
 ./target/release/reclaim-gui
 ```
 
 Expected behavior:
+
 1. App launches
 2. Within 1 second: Status shows "🟢 Scanning..."
 3. Progress visible as it scans default roots
@@ -137,6 +149,7 @@ See [phase-4-testing-guide.md](./phase-4-testing-guide.md) for full checklist.
 > "Don't build what already exists. Piggyback on system services, stay single-process, be transparent."
 
 This architecture respects:
+
 - **User trust**: No hidden daemons
 - **System resources**: Use existing indexers
 - **User control**: Always visible, pausable

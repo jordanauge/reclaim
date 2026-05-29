@@ -3,15 +3,18 @@
 ## Priority 1: Immediate macOS Cleanup Plugins
 
 ### 1. **Xcode Derived Data** (`xcode.rs`)
+
 ```rust
 // ~/Library/Developer/Xcode/DerivedData/*
 // Reproducibility: 1.0 (fully regenerated on build)
 // Action: Delete or Exec: `rm -rf ~/Library/Developer/Xcode/DerivedData`
 // Typical size: 20-50 GB
 ```
+
 **Urgency**: HIGH — Very common on dev Macs
 
 ### 2. **iOS Device Support** (`ios_device_support.rs`)
+
 ```rust
 // ~/Library/Developer/Xcode/iOS DeviceSupport/*
 // Old iOS version symbols downloaded when debugging devices
@@ -21,6 +24,7 @@
 ```
 
 ### 3. **Simulator Devices** (`simulators.rs`)
+
 ```rust
 // ~/Library/Developer/CoreSimulator/Devices/*
 // Old iOS/watchOS/tvOS simulator instances
@@ -30,6 +34,7 @@
 ```
 
 ### 4. **Homebrew Downloads** (`brew_downloads.rs`)
+
 ```rust
 // ~/Library/Caches/Homebrew/downloads/*
 // Downloaded .tar.gz archives after install
@@ -39,6 +44,7 @@
 ```
 
 ### 5. **Docker Images & Volumes** (`docker_full.rs`)
+
 ```rust
 // Current docker.rs is a stub
 // Implement:
@@ -50,6 +56,7 @@
 ```
 
 ### 6. **Trash/Bin** (`trash.rs`)
+
 ```rust
 // ~/.Trash/* (macOS)
 // Reproducibility: 0.0 (user data)
@@ -59,6 +66,7 @@
 ```
 
 ### 7. **Application Caches** (`app_caches.rs`)
+
 ```rust
 // ~/Library/Caches/* (app-specific subdirs)
 // Table-driven config for known apps:
@@ -69,6 +77,7 @@
 ```
 
 ### 8. **Old Time Machine Local Snapshots** (`timemachine_local.rs`)
+
 ```rust
 // tmutil listlocalsnapshots /
 // tmutil deletelocalsnapshots <date>
@@ -78,6 +87,7 @@
 ```
 
 ### 9. **Mail Downloads & Attachments** (`mail_attachments.rs`)
+
 ```rust
 // ~/Library/Mail/V*/MailData/Envelope Index
 // ~/Library/Mail Downloads/*
@@ -86,6 +96,7 @@
 ```
 
 ### 10. **Old Kernel Extensions** (`old_kexts.rs`)
+
 ```rust
 // /Library/Extensions.old/* (created by macOS updates)
 // /System/Library/Extensions.backup/*
@@ -99,6 +110,7 @@
 ## Priority 2: Extended Analysis Features
 
 ### 11. **Duplicate File Finder** (plugin + new module)
+
 ```rust
 // Use content hashing (SHA-256)
 // Group by hash, show duplicate groups
@@ -107,6 +119,7 @@
 ```
 
 ### 12. **Large File Finder** (filter enhancement)
+
 ```rust
 // Add "Top 100 largest files" quick view
 // Ignore system files (/System, /Library)
@@ -114,6 +127,7 @@
 ```
 
 ### 13. **Unused Applications** (macOS-specific)
+
 ```rust
 // Scan /Applications, ~/Applications
 // Check: last opened (via mdls kMDItemLastUsedDate)
@@ -127,6 +141,7 @@
 ## Priority 3: Performance & Caching
 
 ### 14. **Persistent Cache with Merkle Tree**
+
 ```rust
 // Structure:
 // - ~/.cache/reclaim/scan-cache.db (SQLite)
@@ -141,6 +156,7 @@
 ```
 
 ### 15. **Background Indexing Service** (optional daemon)
+
 ```rust
 // Launch agent: com.reclaim.indexer.plist
 // Watches filesystem (FSEvents on macOS)
@@ -153,6 +169,7 @@
 ## Priority 4: Cross-Platform Support
 
 ### 16. **Linux Targets** (extend existing modules)
+
 ```rust
 // apt cache: /var/cache/apt/archives
 // dnf cache: /var/cache/dnf
@@ -161,6 +178,7 @@
 ```
 
 ### 17. **Windows Targets** (new modules)
+
 ```rust
 // Windows.old: C:\Windows.old
 // WinSxS backup: C:\Windows\WinSxS\Backup
@@ -174,6 +192,7 @@
 ## Priority 5: Advanced Features
 
 ### 18. **Disk Usage Map / Sunburst Chart**
+
 ```rust
 // Generate hierarchical disk usage data
 // UI: Interactive sunburst or treemap
@@ -182,6 +201,7 @@
 ```
 
 ### 19. **Smart Categorization**
+
 ```rust
 // Classify files into:
 // - Apps (executables, bundles)
@@ -199,6 +219,7 @@
 ```
 
 ### 20. **Access Tracking & Archival Suggestions**
+
 ```rust
 // Track last access time (atime)
 // Flag files not accessed in >2 years
@@ -209,6 +230,7 @@
 ```
 
 ### 21. **Compression Opportunities**
+
 ```rust
 // Identify compressible files:
 // - Large text files (.log, .json, .xml)
@@ -313,6 +335,7 @@ mod tests {
 ## Implementation Priority
 
 ### Phase 1: Urgent macOS Cleanup (1-2 days)
+
 - [ ] Xcode derived data
 - [ ] Simulators
 - [ ] Homebrew downloads
@@ -320,17 +343,20 @@ mod tests {
 - [ ] Application caches
 
 ### Phase 2: Analysis & UX (2-3 days)
+
 - [ ] Duplicate finder (basic, no Merkle yet)
 - [ ] Disk usage sunburst chart
 - [ ] Smart categorization
 - [ ] Export scan results (JSON/CSV)
 
 ### Phase 3: Performance (1-2 days)
+
 - [ ] SQLite cache
 - [ ] Merkle tree for change detection
 - [ ] Incremental scan
 
 ### Phase 4: Cross-Platform (3-5 days)
+
 - [ ] Linux targets
 - [ ] Windows targets
 - [ ] CI/CD for all platforms

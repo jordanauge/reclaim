@@ -3,6 +3,7 @@
 ## Vision
 
 Transform file system chaos into a navigable **semantic hierarchy** with ~100 meta-groups maximum, enabling:
+
 - Quick overview of disk usage by category
 - Identification of optimization opportunities
 - User annotations (backup priority, confidentiality, etc.)
@@ -410,30 +411,35 @@ Right-click on group:
 ## Implementation Roadmap
 
 ### Phase 1: Classification Engine (2-3 days)
+
 - [ ] Category enum + subcategories
 - [ ] Pattern-based rules
 - [ ] Context detection (repo, workspace, etc.)
 - [ ] Plugin architecture for content classifiers
 
 ### Phase 2: Annotation System (1-2 days)
+
 - [ ] Annotation schema + SQLite storage
 - [ ] Inheritance logic
 - [ ] Outlier detection
 - [ ] UI for annotation editing
 
 ### Phase 3: Grouping Strategies (2-3 days)
+
 - [ ] Grouping rule DSL
 - [ ] Dynamic regrouping
 - [ ] Selection preservation
 - [ ] Multiple simultaneous views
 
 ### Phase 4: Analysis & Suggestions (2-3 days)
+
 - [ ] Duplicate finder (content hashing)
 - [ ] Unused detector (atime)
 - [ ] Large file finder
 - [ ] Move suggestions engine
 
 ### Phase 5: UI Overhaul (3-4 days)
+
 - [ ] Tree view with expand/collapse
 - [ ] Context menus
 - [ ] Drag-and-drop for moving

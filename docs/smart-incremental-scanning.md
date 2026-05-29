@@ -3,6 +3,7 @@
 ## Problem Analysis
 
 ### Why Full Merkle Tree is Too Expensive
+
 ```
 Cost to verify node_modules/ (10K files):
 - Merkle: Walk 10K files, compute 10K hashes = ~1-2 seconds
@@ -11,6 +12,7 @@ Cost to verify node_modules/ (10K files):
 ```
 
 ### Why inotify/FSEvents Don't Work
+
 - ❌ No offline mode (app closed = events lost)
 - ❌ Overkill for gradual accumulation (cleanup targets grow over days/weeks)
 - ❌ We care about folders, not individual files
@@ -19,6 +21,7 @@ Cost to verify node_modules/ (10K files):
 ## Solution: 3-Tier Smart Cache
 
 ### Tier 1: Quick Metadata Check (10-50ms)
+
 ```rust
 pub struct DirectoryMetadata {
     path: PathBuf,
@@ -42,6 +45,7 @@ fn quick_check(path: &Path, cached: &DirectoryMetadata) -> QuickCheckResult {
 ```
 
 ### Tier 2: Shallow Hash (50-200ms)
+
 ```rust
 pub struct ShallowHash {
     // Only hash direct children names + sizes, not recursive
@@ -72,6 +76,7 @@ fn compute_shallow_hash(path: &Path) -> Result<String> {
 ```
 
 ### Tier 3: Deep Scan (1-10s, fallback only)
+
 ```rust
 // Only when shallow hash indicates changes
 fn deep_scan(path: &Path, profile: &Profile) -> Result<Vec<Candidate>> {
@@ -308,12 +313,14 @@ impl GrowthTracker {
 ## Edge Cases
 
 ### 1. Symlinks
+
 ```rust
 // Don't follow symlinks (avoid cycles)
 WalkDir::new(root).follow_links(false)
 ```
 
 ### 2. Permission Errors
+
 ```rust
 // Continue on errors, don't abort entire scan
 for entry in WalkDir::new(root).into_iter().filter_map(|e| e.ok()) {
@@ -322,6 +329,7 @@ for entry in WalkDir::new(root).into_iter().filter_map(|e| e.ok()) {
 ```
 
 ### 3. Network Drives
+
 ```rust
 // Timeout for slow filesystems
 let timeout = Duration::from_secs(5);
@@ -335,6 +343,7 @@ match timeout_operation(|| fs::metadata(path), timeout) {
 ```
 
 ### 4. Very Large Directories
+
 ```rust
 // Sample large directories instead of full scan
 if entry_count > 10_000 {
@@ -389,6 +398,7 @@ Legend:
 The key insight: **Don't try to track every file—cache cleanup targets directly**.
 
 This matches our use case perfectly:
+
 - Targets are well-defined (venv, node_modules, build, etc.)
 - Changes are gradual (accumulation over days/weeks)
 - We care about directory-level state, not individual files

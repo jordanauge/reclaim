@@ -3,6 +3,7 @@
 ## UI/UX Enhancements (1-2 hours each)
 
 ### 1. **Keyboard Shortcuts**
+
 ```rust
 // Add to GUI update() method:
 if ctx.input(|i| i.key_pressed(egui::Key::Space)) {
@@ -17,17 +18,20 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 2. **Bulk Selection Actions**
+
 - Add "Select All" / "Deselect All" buttons
 - "Select by Score > 0.7" quick filter
 - "Select all in this group" (in tree view)
 
 ### 3. **Status Bar with Live Stats**
+
 ```rust
 // Bottom panel showing:
 // Total: 1.2 TB | Scanned: 450 GB | Selected: 23 GB (45 items) | Scannable: 800 GB
 ```
 
 ### 4. **Export Functionality**
+
 ```rust
 // Add buttons:
 // - "Export to CSV" → candidates list with all fields
@@ -36,6 +40,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 5. **Search/Filter Bar**
+
 ```rust
 // Add text search at top:
 // - Filter by path contains "..."
@@ -44,6 +49,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 6. **Undo/History**
+
 ```rust
 // Track last N cleanup operations
 // "Undo last cleanup" → restore from trash (if available)
@@ -55,6 +61,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ## Performance Improvements (2-3 hours)
 
 ### 7. **Lazy Loading for Large Scans**
+
 ```rust
 // Don't render all 10,000 items at once
 // Use egui::ScrollArea with virtual scrolling
@@ -62,6 +69,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 8. **Async Cleanup**
+
 ```rust
 // Current apply_cleanup() blocks UI
 // Use thread + channel like scan
@@ -69,6 +77,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 9. **Incremental Filtering**
+
 ```rust
 // Cache filtered results
 // Only recompute when filters change
@@ -80,6 +89,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ## Data Quality & Safety (1-2 hours each)
 
 ### 10. **Dry-Run Preview Enhancement**
+
 ```rust
 // Show:
 // - Exact commands that will run (for Exec actions)
@@ -88,6 +98,7 @@ if ctx.input(|i| i.key_pressed(egui::Key::Delete)) {
 ```
 
 ### 11. **Exclude Patterns in Profile**
+
 ```toml
 [global]
 exclude_patterns = [
@@ -98,6 +109,7 @@ exclude_patterns = [
 ```
 
 ### 12. **Size Verification**
+
 ```rust
 // Before delete: re-check size hasn't changed
 // Warn if file grew (active log file)
@@ -105,6 +117,7 @@ exclude_patterns = [
 ```
 
 ### 13. **Backup Before Delete** (optional)
+
 ```rust
 // Move to ~/.reclaim-trash/ instead of rm -rf
 // Keep for 7 days
@@ -116,6 +129,7 @@ exclude_patterns = [
 ## Code Architecture Improvements (4-6 hours)
 
 ### 14. **Extract GUI into Modules**
+
 ```
 crates/reclaim-gui/src/
   main.rs         # App setup
@@ -135,6 +149,7 @@ crates/reclaim-gui/src/
 ```
 
 ### 15. **Shared State Management**
+
 ```rust
 // Current: ReclaimApp has 20+ fields
 // Better: Group related state
@@ -150,6 +165,7 @@ struct ReclaimApp {
 ```
 
 ### 16. **Action Framework**
+
 ```rust
 // Current: Action enum mixed with execution
 // Better: Separate concerns
@@ -171,6 +187,7 @@ struct ArchiveExecutor { dest: PathBuf }
 ## Testing & Validation (3-4 hours)
 
 ### 17. **Integration Test Suite**
+
 ```rust
 #[test]
 fn test_full_scan_pipeline() {
@@ -187,6 +204,7 @@ fn test_full_scan_pipeline() {
 ```
 
 ### 18. **Benchmark Suite**
+
 ```rust
 // Use criterion.rs
 // Benchmark:
@@ -196,6 +214,7 @@ fn test_full_scan_pipeline() {
 ```
 
 ### 19. **Fuzzing**
+
 ```rust
 // cargo-fuzz
 // Generate random filesystem structures
@@ -207,6 +226,7 @@ fn test_full_scan_pipeline() {
 ## Documentation (2-3 hours)
 
 ### 20. **User Guide**
+
 ```markdown
 # docs/user-guide.md
 - Installation
@@ -218,6 +238,7 @@ fn test_full_scan_pipeline() {
 ```
 
 ### 21. **Video Tutorial**
+
 ```
 Record 5-minute screencast:
 1. Launch app
@@ -229,6 +250,7 @@ Record 5-minute screencast:
 ```
 
 ### 22. **Inline Help**
+
 ```rust
 // Add "?" icons with tooltips
 // Explain each filter
@@ -241,6 +263,7 @@ Record 5-minute screencast:
 ## Reliability & Error Handling (2-3 hours)
 
 ### 23. **Graceful Degradation**
+
 ```rust
 // If scan fails on one root → continue others
 // If one target fails → log and continue
@@ -248,6 +271,7 @@ Record 5-minute screencast:
 ```
 
 ### 24. **Permission Handling**
+
 ```rust
 // Detect when we need sudo
 // Show clear message: "Some paths require admin access"
@@ -255,6 +279,7 @@ Record 5-minute screencast:
 ```
 
 ### 25. **Progress Interruption**
+
 ```rust
 // Allow canceling long scans
 // Save partial results
@@ -266,6 +291,7 @@ Record 5-minute screencast:
 ## Monitoring & Analytics (optional, 1-2 hours)
 
 ### 26. **Usage Statistics** (local only, privacy-first)
+
 ```rust
 // Track in ~/.reclaim/stats.json:
 // - Total space freed (lifetime)
@@ -275,6 +301,7 @@ Record 5-minute screencast:
 ```
 
 ### 27. **Scan History**
+
 ```rust
 // Keep last 10 scans
 // Show trend graph: space usage over time
@@ -286,30 +313,35 @@ Record 5-minute screencast:
 ## Immediate Action Plan (for this week)
 
 ### Day 1: macOS Plugins (HIGH PRIORITY)
+
 - [ ] Implement Xcode cleanup
 - [ ] Implement Docker full support
 - [ ] Implement Homebrew downloads
 - [ ] Test on your Mac → free up 20-30 GB
 
 ### Day 2: UX Polish
+
 - [ ] Add keyboard shortcuts
 - [ ] Add bulk selection
 - [ ] Add export to CSV
 - [ ] Add search/filter bar
 
 ### Day 3: Safety & Performance
+
 - [ ] Async cleanup with progress
 - [ ] Backup before delete
 - [ ] Size verification
 - [ ] Lazy loading for large scans
 
 ### Day 4: Code Quality
+
 - [ ] Extract GUI into modules
 - [ ] Add integration tests
 - [ ] Document all public APIs
 - [ ] Fix all clippy warnings
 
 ### Day 5: Real-World Testing
+
 - [ ] Full scan of your Mac
 - [ ] Identify any false positives
 - [ ] Measure performance (speed, memory)
